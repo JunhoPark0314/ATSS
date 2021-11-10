@@ -28,6 +28,7 @@ def build_resnet_fpn_backbone(cfg):
     body = resnet.ResNet(cfg)
     in_channels_stage2 = cfg.MODEL.RESNETS.RES2_OUT_CHANNELS
     out_channels = cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS
+    interpolate = cfg.MODEL.FPN.INTERPOLATE
     fpn = fpn_module.FPN(
         in_channels_list=[
             in_channels_stage2,
@@ -40,6 +41,7 @@ def build_resnet_fpn_backbone(cfg):
             cfg.MODEL.FPN.USE_GN, cfg.MODEL.FPN.USE_RELU
         ),
         top_blocks=fpn_module.LastLevelMaxPool(),
+        interpolate=interpolate
     )
     model = nn.Sequential(OrderedDict([("body", body), ("fpn", fpn)]))
     model.out_channels = out_channels
@@ -54,6 +56,7 @@ def build_resnet_fpn_p3p7_backbone(cfg):
     out_channels = cfg.MODEL.RESNETS.BACKBONE_OUT_CHANNELS
     in_channels_p6p7 = in_channels_stage2 * 8 if cfg.MODEL.RETINANET.USE_C5 \
         else out_channels
+    interpolate = cfg.MODEL.FPN.INTERPOLATE
     fpn = fpn_module.FPN(
         in_channels_list=[
             0,
@@ -66,6 +69,7 @@ def build_resnet_fpn_p3p7_backbone(cfg):
             cfg.MODEL.FPN.USE_GN, cfg.MODEL.FPN.USE_RELU
         ),
         top_blocks=fpn_module.LastLevelP6P7(in_channels_p6p7, out_channels),
+        interpolate=interpolate,
     )
     model = nn.Sequential(OrderedDict([("body", body), ("fpn", fpn)]))
     model.out_channels = out_channels

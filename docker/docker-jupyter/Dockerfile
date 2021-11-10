@@ -19,10 +19,10 @@ ENV PATH=/miniconda/bin:$PATH
 
 # Create a Python 3.6 environment
 RUN /miniconda/bin/conda install -y conda-build \
- && /miniconda/bin/conda create -y --name py36 python=3.6.7 \
+ && /miniconda/bin/conda create -y --name PY376 python=3.6.7 \
  && /miniconda/bin/conda clean -ya
 
-ENV CONDA_DEFAULT_ENV=py36
+ENV CONDA_DEFAULT_ENV=PY376
 ENV CONDA_PREFIX=/miniconda/envs/$CONDA_DEFAULT_ENV
 ENV PATH=$CONDA_PREFIX/bin:$PATH
 ENV CONDA_AUTO_UPDATE_CONDA=false

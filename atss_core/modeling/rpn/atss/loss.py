@@ -304,6 +304,9 @@ class ATSSLossComputation(object):
         else:
             reg_loss = box_regression_flatten.sum()
             centerness_loss = centerness_flatten.sum()
+        
+        #reg_loss += box_regression_flatten.sum() * 0
+        #centerness_loss += centerness_flatten.sum() * 0
 
         return cls_loss, reg_loss * self.cfg.MODEL.ATSS.REG_LOSS_WEIGHT, centerness_loss
 

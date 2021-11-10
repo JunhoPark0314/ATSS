@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "module": "torch.distributed.launch",
+            "console": "integratedTerminal",
+            "args": [
+                "--nproc_per_node", "1",
+                "--master_port", "33231",
+                "tools/train_net.py",
+                "--config-file", "configs/atss/atss_R_50_FPN_1x.yaml",
+                "OUTPUT_DIR", "output/debug",
+                "MODEL.FPN.INTERPOLATE",  "True",
+                "MODEL.ATSS.ANCHOR_STRIDES", "8,8,8,8,8"
+            ]
+        }
+    ]
+}

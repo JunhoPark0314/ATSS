@@ -12,7 +12,7 @@ class FPN(nn.Module):
     """
 
     def __init__(
-        self, in_channels_list, out_channels, conv_block, top_blocks=None
+        self, in_channels_list, out_channels, conv_block, top_blocks=None, interpolate=None
     ):
         """
         Arguments:
@@ -26,6 +26,7 @@ class FPN(nn.Module):
         super(FPN, self).__init__()
         self.inner_blocks = []
         self.layer_blocks = []
+        self.interpolate = interpolate
         for idx, in_channels in enumerate(in_channels_list, 1):
             inner_block = "fpn_inner{}".format(idx)
             layer_block = "fpn_layer{}".format(idx)
@@ -71,6 +72,11 @@ class FPN(nn.Module):
         elif isinstance(self.top_blocks, LastLevelMaxPool):
             last_results = self.top_blocks(results[-1])
             results.extend(last_results)
+        
+        if self.interpolate:
+            H, W = results[0].shape[2:]
+            for i, r in enumerate(results):
+                results[i] = F.interpolate(results[i], (H,W), mode="bicubic", align_corners=True)
 
         return tuple(results)
 
