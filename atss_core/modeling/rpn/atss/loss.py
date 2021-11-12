@@ -175,7 +175,7 @@ class ATSSLossComputation(object):
                 r = bboxes_per_im[:, 2] - e_anchors_cx[candidate_idxs].view(-1, num_gt)
                 b = bboxes_per_im[:, 3] - e_anchors_cy[candidate_idxs].view(-1, num_gt)
                 is_in_gts = torch.stack([l, t, r, b], dim=1).min(dim=1)[0] > 0.01
-                is_pos = is_pos & is_in_gts
+                is_pos = is_pos #& is_in_gts
 
                 # if an anchor box is assigned to multiple gts, the one with the highest IoU will be selected.
                 ious_inf = torch.full_like(ious, -INF).t().contiguous().view(-1)
@@ -265,8 +265,15 @@ class ATSSLossComputation(object):
         b = gts[:, 3] - anchors_cy
         left_right = torch.stack([l, r], dim=1)
         top_bottom = torch.stack([t, b], dim=1)
-        centerness = torch.sqrt((left_right.min(dim=-1)[0] / left_right.max(dim=-1)[0]) * \
-                      (top_bottom.min(dim=-1)[0] / top_bottom.max(dim=-1)[0]))
+
+        left_right_ctr = (left_right.min(dim=-1)[0].sign() *(left_right.abs().min(dim=-1)[0] / left_right.abs().sum(dim=-1))*2 + 0.5).clamp(min=0) / 2
+        top_bottom_ctr = (top_bottom.min(dim=-1)[0].sign() *(top_bottom.abs().min(dim=-1)[0] / top_bottom.abs().sum(dim=-1))*2 + 0.5).clamp(min=0) / 2
+
+        centerness = (left_right_ctr * top_bottom_ctr).sqrt()
+
+        #centerness = torch.sqrt((left_right.min(dim=-1)[0] / left_right.max(dim=-1)[0]) * \
+        #              (top_bottom.min(dim=-1)[0] / top_bottom.max(dim=-1)[0]))
+
         assert not torch.isnan(centerness).any()
         return centerness
 

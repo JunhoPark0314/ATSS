@@ -2,7 +2,7 @@
 import os
 
 from yacs.config import CfgNode as CN
-
+ 
 
 # -----------------------------------------------------------------------------
 # Convention about Training / Test specific parameters
@@ -107,7 +107,7 @@ _C.MODEL.BACKBONE.USE_GN = False
 _C.MODEL.FPN = CN()
 _C.MODEL.FPN.USE_GN = False
 _C.MODEL.FPN.USE_RELU = False
-_C.MODEL.FPN.INTERPOLATE = False
+_C.MODEL.FPN.INTERPOLATE = -1
 
 
 

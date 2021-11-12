@@ -141,7 +141,7 @@ def make_anchor_generator(config):
         anchor_sizes, aspect_ratios, anchor_stride, straddle_thresh
     )
     return anchor_generator
-
+ 
 
 def make_anchor_generator_retinanet(config):
     anchor_sizes = config.MODEL.RETINANET.ANCHOR_SIZES

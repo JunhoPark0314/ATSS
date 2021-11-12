@@ -12,7 +12,7 @@ class FPN(nn.Module):
     """
 
     def __init__(
-        self, in_channels_list, out_channels, conv_block, top_blocks=None, interpolate=None
+        self, in_channels_list, out_channels, conv_block, top_blocks=None, interpolate=-1
     ):
         """
         Arguments:
@@ -73,10 +73,10 @@ class FPN(nn.Module):
             last_results = self.top_blocks(results[-1])
             results.extend(last_results)
         
-        if self.interpolate:
-            H, W = results[0].shape[2:]
+        if self.interpolate >= 0:
+            H, W = results[self.interpolate].shape[2:]
             for i, r in enumerate(results):
-                results[i] = F.interpolate(results[i], (H,W), mode="bicubic", align_corners=True)
+                results[i] = F.upsample_bilinear(results[i], (H,W))
 
         return tuple(results)
 

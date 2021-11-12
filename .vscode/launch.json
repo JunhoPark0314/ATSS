@@ -17,7 +17,7 @@
                 "--config-file", "configs/atss/atss_R_50_FPN_1x.yaml",
                 "OUTPUT_DIR", "output/debug",
                 "MODEL.FPN.INTERPOLATE",  "True",
-                "MODEL.ATSS.ANCHOR_STRIDES", "8,8,8,8,8"
+                "MODEL.ATSS.ANCHOR_STRIDES", "32,32,32,32,32",
             ]
         }
     ]
